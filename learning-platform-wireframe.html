@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform - Wireframes & Planning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin: 60px 0 30px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin: 30px 0 15px;
+            color: #a8b3ff;
+        }
+
+        .intro {
+            font-size: 1.2em;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+        }
+
+        /* Branding Section */
+        .branding-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .brand-option {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-option:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .brand-option.recommended::before {
+            content: '⭐ RECOMMENDED';
+            position: absolute;
+            top: 10px;
+            right: -35px;
+            background: #667eea;
+            color: white;
+            padding: 5px 40px;
+            font-size: 0.7em;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+
+        .logo-preview {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            border-radius: 20px;
+        }
+
+        .brand-name {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .brand-tagline {
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .brand-description {
+            color: #b0b0b0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* Color Scheme */
+        .color-scheme {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .color-item {
+            text-align: center;
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 100px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #2a2a2a;
+        }
+
+        .color-label {
+            font-size: 0.9em;
+            color: #b0b0b0;
+        }
+
+        .color-hex {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            font-size: 0.85em;
+        }
+
+        /* Wireframes */
+        .wireframe-section {
+            margin: 40px 0;
+        }
+
+        .wireframe-container {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 20px 0;
+            border: 2px solid #2a2a2a;
+        }
+
+        .wireframe {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .wireframe-title {
+            color: #1a1a1a;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Page elements */
+        .header-box {
+            background: #f0f0f0;
+            height: 80px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            margin-bottom: 30px;
+        }
+
+        .logo-box {
+            background: #667eea;
+            width: 120px;
+            height: 40px;
+            border-radius: 4px;
+        }
+
+        .nav-box {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-item {
+            background: #ddd;
+            width: 80px;
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .hero-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 300px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .search-box {
+            background: white;
+            border: 3px solid #667eea;
+            height: 60px;
+            border-radius: 30px;
+            margin: -30px auto 40px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .grid-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card-box {
+            background: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .sidebar-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .sidebar-box {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .filter-item {
+            background: #e8e8e8;
+            height: 40px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .content-box {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .resource-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .resource-title {
+            background: #333;
+            height: 20px;
+            width: 70%;
+            border-radius: 4px;
+        }
+
+        .resource-type {
+            background: #667eea;
+            height: 25px;
+            width: 80px;
+            border-radius: 4px;
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .meta-item {
+            background: #e8e8e8;
+            height: 20px;
+            width: 60px;
+            border-radius: 4px;
+        }
+
+        /* Flow diagram */
+        .flow-diagram {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            overflow-x: auto;
+        }
+
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1200px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flow-page {
+            background: #2a2a2a;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-page.main {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .flow-arrow {
+            color: #667eea;
+            font-size: 2em;
+        }
+
+        /* Feature Breakdown */
+        .feature-card {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .feature-title {
+            font-size: 1.5em;
+            color: #a8b3ff;
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .stage {
+            background: #0f0f0f;
+            border-left: 3px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .stage-title {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .task-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .task-list li {
+            color: #b0b0b0;
+            margin: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .task-list li::before {
+            content: '□';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .tech-stack {
+            background: #0f0f0f;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .tech-stack strong {
+            color: #667eea;
+        }
+
+        .timeline {
+            color: #888;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-container {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Learning Platform - Complete Project Plan</h1>
+        <p class="intro">Comprehensive wireframes, branding, design system, and feature breakdown for your learning resource platform</p>
+
+        <!-- BRANDING OPTIONS -->
+        <h2>🎨 Branding Options</h2>
+        <div class="branding-grid">
+            <div class="brand-option recommended">
+                <div class="logo-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    SN
+                </div>
+                <div class="brand-name" style="color: #667eea;">SkillNest</div>
+                <div class="brand-tagline">Where Learning Takes Flight</div>
+                <div class="brand-description">
+                    <strong>Why it works:</strong> "Nest" implies a home/hub for resources. Warm, approachable, community-focused. Easy to remember and pronounce globally.
+                    <br><br>
+                    <strong>Logo concept:</strong> Abstract bird's nest made of interconnected learning paths, gradient from purple to violet.
+                </div>
+            </div>
+
+            <div class="brand-option">
+                <div class="logo-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                    LM
+                </div>
+                <div class="brand-name" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">LearnMap</div>
+                <div class="brand-tagline">Chart Your Learning Journey</div>
+                <div class="brand-description">
+                    <strong>Why it works:</strong> Clear value proposition - mapping out learning paths. Professional yet friendly. SEO-friendly name.
+                    <br><br>
+                    <strong>Logo concept:</strong> Stylized map with interconnected nodes forming a lightbulb, pink-to-red gradient.
+                </div>
+            </div>
+
+            <div class="brand-option">
+                <div class="logo-preview" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                    DH
+                </div>
+                <div class="brand-name" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DevHub</div>
+                <div class="brand-tagline">Your Developer Resource Central</div>
+                <div class="brand-description">
+                    <strong>Why it works:</strong> Appeals directly to developer audience. "Hub" suggests centralization. Clean and modern.
+                    <br><br>
+                    <strong>Logo concept:</strong> Hexagonal hub with radiating connections, cyan-to-blue gradient. Tech-forward aesthetic.
+                </div>
+            </div>
+
+            <div class="brand-option">
+                <div class="logo-preview" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+                    PR
+                </div>
+                <div class="brand-name" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PathRise</div>
+                <div class="brand-tagline">Rise Through Curated Paths</div>
+                <div class="brand-description">
+                    <strong>Why it works:</strong> Implies upward progression and guided learning. Motivational and aspirational tone.
+                    <br><br>
+                    <strong>Logo concept:</strong> Ascending staircase made of book icons, warm gradient from coral to yellow.
+                </div>
+            </div>
+        </div>
+
+        <!-- COLOR SCHEME -->
+        <h2>🎨 Color Scheme (Recommended for SkillNest)</h2>
+        <div class="color-scheme">
+            <h3>Modern Developer-Friendly Palette</h3>
+            <p style="color: #b0b0b0; margin-bottom: 20px;">A sophisticated dark-mode-first design with vibrant accents that works across all devices and accessibility standards.</p>
+            
+            <div class="color-grid">
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #0a0a0a;"></div>
+                    <div class="color-label">Background Dark</div>
+                    <div class="color-hex">#0a0a0a</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #1a1a1a;"></div>
+                    <div class="color-label">Surface Dark</div>
+                    <div class="color-hex">#1a1a1a</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #667eea;"></div>
+                    <div class="color-label">Primary</div>
+                    <div class="color-hex">#667eea</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #764ba2;"></div>
+                    <div class="color-label">Primary Dark</div>
+                    <div class="color-hex">#764ba2</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #f093fb;"></div>
+                    <div class="color-label">Accent</div>
+                    <div class="color-hex">#f093fb</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #e8e8e8;"></div>
+                    <div class="color-label">Text Primary</div>
+                    <div class="color-hex">#e8e8e8</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #b0b0b0;"></div>
+                    <div class="color-label">Text Secondary</div>
+                    <div class="color-hex">#b0b0b0</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background: #4ade80;"></div>
+                    <div class="color-label">Success</div>
+                    <div class="color-hex">#4ade80</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SITE FLOW -->
+        <h2>🗺️ Site Flow & Architecture</h2>
+        <div class="flow-diagram">
+            <div class="flow-container">
+                <div class="flow-page main">Home<br>Landing</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-page">Browse<br>Skills</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-page">Skill Page<br>(Python, JS...)</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-page">Resource<br>Detail</div>
+            </div>
+            <div style="text-align: center; margin: 20px; color: #667eea; font-size: 2em;">↓</div>
+            <div class="flow-container">
+                <div class="flow-page">Search<br>Results</div>
+                <div class="flow-arrow">←</div>
+                <div class="flow-page main">User<br>Profile</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-page">Submit<br>Resource</div>
+            </div>
+            <div style="text-align: center; margin: 20px; color: #667eea; font-size: 2em;">↓</div>
+            <div class="flow-container">
+                <div class="flow-page">Roadmap<br>View</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-page">Bookmarks</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-page">Auth<br>(Login/Signup)</div>
+            </div>
+        </div>
+
+        <!-- WIREFRAMES -->
+        <h2>📐 Page Wireframes</h2>
+
+        <div class="wireframe-section">
+            <h3>1. Home Page</h3>
+            <div class="wireframe-container">
+                <div class="wireframe">
+                    <div class="wireframe-title">Home / Landing Page</div>
+                    <div class="header-box">
+                        <div class="logo-box"></div>
+                        <div class="nav-box">
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                        </div>
+                    </div>
+                    <div class="hero-box">Hero Section: "Learn Anything, Faster"</div>
+                    <div class="search-box"></div>
+                    <div style="color: #1a1a1a; font-weight: bold; margin: 30px 0 15px;">Popular Skills</div>
+                    <div class="grid-box">
+                        <div class="card-box">Python</div>
+                        <div class="card-box">JavaScript</div>
+                        <div class="card-box">React</div>
+                        <div class="card-box">Design</div>
+                        <div class="card-box">Data Science</div>
+                        <div class="card-box">DevOps</div>
+                    </div>
+                    <div style="color: #1a1a1a; font-weight: bold; margin: 30px 0 15px;">Trending Resources</div>
+                    <div class="grid-box">
+                        <div class="card-box" style="height: 150px;">Resource 1</div>
+                        <div class="card-box" style="height: 150px;">Resource 2</div>
+                        <div class="card-box" style="height: 150px;">Resource 3</div>
+                        <div class="card-box" style="height: 150px;">Resource 4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wireframe-section">
+            <h3>2. Skill Detail Page (e.g., Python)</h3>
+            <div class="wireframe-container">
+                <div class="wireframe">
+                    <div class="wireframe-title">Skill Detail Page - Python</div>
+                    <div class="header-box">
+                        <div class="logo-box"></div>
+                        <div class="nav-box">
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                        </div>
+                    </div>
+                    <div style="background: #667eea; padding: 40px; border-radius: 8px; color: white; margin-bottom: 30px;">
+                        <div style="font-size: 2em; font-weight: bold; margin-bottom: 10px;">Python</div>
+                        <div>1,234 resources • 456 contributors</div>
+                    </div>
+                    <div class="sidebar-layout">
+                        <div class="sidebar-box">
+                            <div style="color: #333; font-weight: bold; margin-bottom: 15px;">Filters</div>
+                            <div class="filter-item"></div>
+                            <div class="filter-item"></div>
+                            <div class="filter-item"></div>
+                            <div class="filter-item"></div>
+                            <div style="color: #333; font-weight: bold; margin: 25px 0 15px;">Resource Type</div>
+                            <div class="filter-item"></div>
+                            <div class="filter-item"></div>
+                            <div class="filter-item"></div>
+                        </div>
+                        <div class="content-box">
+                            <div class="resource-card">
+                                <div class="resource-header">
+                                    <div class="resource-title"></div>
+                                    <div class="resource-type"></div>
+                                </div>
+                                <div style="background: #e8e8e8; height: 15px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #e8e8e8; height: 15px; width: 80%; border-radius: 4px;"></div>
+                                <div class="resource-meta">
+                                    <div class="meta-item"></div>
+                                    <div class="meta-item"></div>
+                                    <div class="meta-item"></div>
+                                </div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="resource-header">
+                                    <div class="resource-title"></div>
+                                    <div class="resource-type"></div>
+                                </div>
+                                <div style="background: #e8e8e8; height: 15px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #e8e8e8; height: 15px; width: 80%; border-radius: 4px;"></div>
+                                <div class="resource-meta">
+                                    <div class="meta-item"></div>
+                                    <div class="meta-item"></div>
+                                    <div class="meta-item"></div>
+                                </div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="resource-header">
+                                    <div class="resource-title"></div>
+                                    <div class="resource-type"></div>
+                                </div>
+                                <div style="background: #e8e8e8; height: 15px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #e8e8e8; height: 15px; width: 80%; border-radius: 4px;"></div>
+                                <div class="resource-meta">
+                                    <div class="meta-item"></div>
+                                    <div class="meta-item"></div>
+                                    <div class="meta-item"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wireframe-section">
+            <h3>3. Resource Detail Page</h3>
+            <div class="wireframe-container">
+                <div class="wireframe">
+                    <div class="wireframe-title">Resource Detail Page</div>
+                    <div class="header-box">
+                        <div class="logo-box"></div>
+                        <div class="nav-box">
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                            <div class="nav-item"></div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                        <div>
+                            <div style="background: #333; height: 40px; width: 80%; border-radius: 6px; margin-bottom: 15px;"></div>
+                            <div style="background: #e8e8e8; height: 200px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: #666;">Thumbnail / Preview</div>
+                            <div style="background: #f8f8f8; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <div style="background: #ddd; height: 15px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #ddd; height: 15px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #ddd; height: 15px; width: 90%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #ddd; height: 15px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #ddd; height: 15px; width: 85%; border-radius: 4px; margin: 5px 0;"></div>
+                            </div>
+                            <div style="color: #333; font-weight: bold; margin-bottom: 15px;">Comments (24)</div>
+                            <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #667eea;">
+                                <div style="background: #ddd; height: 12px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #ddd; height: 12px; width: 95%; border-radius: 4px; margin: 5px 0;"></div>
+                            </div>
+                            <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #667eea;">
+                                <div style="background: #ddd; height: 12px; width: 100%; border-radius: 4px; margin: 5px 0;"></div>
+                                <div style="background: #ddd; height: 12px; width: 80%; border-radius: 4px; margin: 5px 0;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="background: #f8f8f8; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <div style="color: #333; font-weight: bold; margin-bottom: 15px;">Actions</div>
+                                <div style="background: #667eea; height: 45px; border-radius: 6px; margin-bottom: 10px;"></div>
+                                <div style="background: #e8e8e8; height: 45px; border-radius: 6px; margin-bottom: 10px;"></div>
+                                <div style="background: #e8e8e8; height: 45px; border-radius: 6px;"></div>
+                            </div>
+                            <div style="background: #f8f8f8; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <div style="color: #333; font-weight: bold; margin-bottom: 15px;">Details</div>
+                                <div style="background: #e8e8e8; height: 12px; width: 70%; border-radius: 4px; margin: 10px 0;"></div>
+                                <div style="background: #e8e8e8; height: 12px; width: 60%; border-radius: 4px; margin: 10px 0;"></div>
+                                <div style="background: #e8e8e8; height: 12px; width: 80%; border-radius: 4px; margin: 10px 0;"></div>
+                            </div>
+                            <div style="background: #f8f8f8; padding: 20px; border-radius: 8px;">
+                                <div style="color: #333; font-weight: bold; margin-bottom: 15px;">Related Resources</div>
+                                <div style="background: white; border: 2px solid #e0e0e0; height: 80px; border-radius: 6px; margin-bottom: 10px;"></div>
+                                <div style="background: white; border: 2px solid #e0e0e0; height: 80px; border-radius: 6px; margin-bottom: 10px;"></div>
+                                <div style="background: white; border: 2px solid #e0e0e0; height: 80px; border-radius: 6px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURE BREAKDOWN -->
+        <h2>🚀 First 5 Features - Detailed Breakdown</h2>
+        <p class="intro">Complete implementation plan from setup to deployment for MVP launch</p>
+
+        <!-- Feature 1 -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-number">1</div>
+                <div class="feature-title">Project Setup & Authentication</div>
+                <div class="timeline">⏱️ 2-3 days</div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 1: Environment Setup (Day 1)</div>
+                <ul class="task-list">
+                    <li>Initialize Next.js 14 project with TypeScript and App Router</li>
+                    <li>Install dependencies: Supabase client, shadcn/ui, Tailwind CSS</li>
+                    <li>Set up Supabase project and get credentials</li>
+                    <li>Configure environment variables (.env.local)</li>
+                    <li>Set up folder structure (/app, /components, /lib, /types)</li>
+                    <li>Configure Tailwind with custom color scheme</li>
+                    <li>Add fonts (e.g., Inter for body, plus a distinctive heading font)</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Tech:</strong> Next.js 14, TypeScript, Tailwind CSS, Supabase
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 2: Database Schema (Day 1-2)</div>
+                <ul class="task-list">
+                    <li>Create users table (extends Supabase auth.users)</li>
+                    <li>Create profiles table (username, avatar, bio, created_at)</li>
+                    <li>Set up Row Level Security (RLS) policies</li>
+                    <li>Test database connection from Next.js</li>
+                    <li>Create Supabase client utilities (server & client)</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>SQL Tables:</strong> profiles (id, username, avatar_url, bio, created_at)
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 3: Authentication Flow (Day 2-3)</div>
+                <ul class="task-list">
+                    <li>Create auth context provider</li>
+                    <li>Build login page (/app/login/page.tsx)</li>
+                    <li>Build signup page (/app/signup/page.tsx)</li>
+                    <li>Implement email/password authentication</li>
+                    <li>Add Google OAuth (optional for MVP)</li>
+                    <li>Create protected route middleware</li>
+                    <li>Build user menu component (profile dropdown)</li>
+                    <li>Implement logout functionality</li>
+                    <li>Add loading states and error handling</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Pages:</strong> /login, /signup | <strong>Components:</strong> AuthProvider, UserMenu
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 4: Testing & Polish</div>
+                <ul class="task-list">
+                    <li>Test sign up flow end-to-end</li>
+                    <li>Test login flow with different scenarios</li>
+                    <li>Test logout and session persistence</li>
+                    <li>Add form validation with Zod</li>
+                    <li>Style auth pages with brand colors</li>
+                    <li>Add password strength indicator</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-number">2</div>
+                <div class="feature-title">Skills/Languages System</div>
+                <div class="timeline">⏱️ 2-3 days</div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 1: Database Setup (Day 1)</div>
+                <ul class="task-list">
+                    <li>Create skills table (id, name, slug, description, icon, category, created_at)</li>
+                    <li>Create categories table (id, name, slug, icon)</li>
+                    <li>Add RLS policies for public read access</li>
+                    <li>Seed database with initial skills (Python, JavaScript, React, etc.)</li>
+                    <li>Create TypeScript types for skills</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>SQL Tables:</strong> skills, categories | <strong>Sample Data:</strong> 10-15 popular skills
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 2: Skills Browse Page (Day 1-2)</div>
+                <ul class="task-list">
+                    <li>Create /skills page layout</li>
+                    <li>Build SkillCard component (icon, name, resource count)</li>
+                    <li>Implement grid layout with responsive design</li>
+                    <li>Add category filter tabs</li>
+                    <li>Add search functionality for skills</li>
+                    <li>Implement loading skeletons</li>
+                    <li>Add empty states</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Pages:</strong> /skills | <strong>Components:</strong> SkillCard, SkillGrid, CategoryFilter
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 3: Home Page Integration (Day 2-3)</div>
+                <ul class="task-list">
+                    <li>Create home page layout with hero section</li>
+                    <li>Add prominent search bar</li>
+                    <li>Display "Popular Skills" section (top 8-12)</li>
+                    <li>Add navigation to skills</li>
+                    <li>Implement smooth animations on page load</li>
+                    <li>Make search functional (navigate to /skills with query)</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Pages:</strong> / (home) | <strong>Components:</strong> Hero, SearchBar, PopularSkills
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 4: API & Optimization</div>
+                <ul class="task-list">
+                    <li>Create API route for skills search</li>
+                    <li>Add caching with SWR or TanStack Query</li>
+                    <li>Optimize images and icons</li>
+                    <li>Test on mobile devices</li>
+                    <li>Add keyboard navigation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-number">3</div>
+                <div class="feature-title">Resources System (View & Browse)</div>
+                <div class="timeline">⏱️ 3-4 days</div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 1: Database Schema (Day 1)</div>
+                <ul class="task-list">
+                    <li>Create resources table (id, skill_id, user_id, title, description, url, type, thumbnail, created_at)</li>
+                    <li>Add resource_types enum (video, article, course, pdf, documentation, tool)</li>
+                    <li>Create resource_tags table for additional categorization</li>
+                    <li>Set up RLS policies (public read, authenticated write)</li>
+                    <li>Create indexes for performance (skill_id, created_at)</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>SQL Tables:</strong> resources, resource_tags | <strong>Types:</strong> video, article, course, pdf, docs
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 2: Skill Detail Page (Day 1-2)</div>
+                <ul class="task-list">
+                    <li>Create /skills/[slug] dynamic route</li>
+                    <li>Build skill header component (icon, name, stats)</li>
+                    <li>Create sidebar filter component (type, level, free/paid)</li>
+                    <li>Build ResourceCard component</li>
+                    <li>Implement masonry/grid layout for resources</li>
+                    <li>Add sort options (newest, most liked, trending)</li>
+                    <li>Implement pagination or infinite scroll</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Pages:</strong> /skills/[slug] | <strong>Components:</strong> ResourceCard, FilterSidebar, ResourceGrid
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 3: Resource Detail Page (Day 2-3)</div>
+                <ul class="task-list">
+                    <li>Create /resources/[id] dynamic route</li>
+                    <li>Build resource header (title, type badge, author)</li>
+                    <li>Add thumbnail/preview section</li>
+                    <li>Display full description with markdown support</li>
+                    <li>Add metadata (views, likes, date added)</li>
+                    <li>Create "Visit Resource" CTA button</li>
+                    <li>Add related resources section</li>
+                    <li>Implement breadcrumb navigation</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Pages:</strong> /resources/[id] | <strong>Components:</strong> ResourceHeader, ResourceContent
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 4: Polish & Performance (Day 3-4)</div>
+                <ul class="task-list">
+                    <li>Add loading states and skeletons</li>
+                    <li>Implement error boundaries</li>
+                    <li>Add SEO metadata for all pages</li>
+                    <li>Optimize images with Next.js Image</li>
+                    <li>Add Open Graph images</li>
+                    <li>Test responsive design</li>
+                    <li>Add keyboard shortcuts for navigation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-number">4</div>
+                <div class="feature-title">Like & Bookmark System</div>
+                <div class="timeline">⏱️ 2 days</div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 1: Database Setup (Day 1)</div>
+                <ul class="task-list">
+                    <li>Create likes table (user_id, resource_id, created_at)</li>
+                    <li>Create bookmarks table (user_id, resource_id, created_at)</li>
+                    <li>Add unique constraints (user_id + resource_id)</li>
+                    <li>Set up RLS policies (users can only manage their own)</li>
+                    <li>Create database functions for counting likes</li>
+                    <li>Add like_count to resources table (with trigger for updates)</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>SQL Tables:</strong> likes, bookmarks | <strong>Features:</strong> Real-time counts, optimistic updates
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 2: Like Functionality (Day 1)</div>
+                <ul class="task-list">
+                    <li>Create API routes (POST /api/resources/[id]/like, DELETE)</li>
+                    <li>Build LikeButton component with heart icon</li>
+                    <li>Implement optimistic updates (instant UI feedback)</li>
+                    <li>Add animation on like/unlike</li>
+                    <li>Show like count next to button</li>
+                    <li>Handle authentication (redirect to login if not logged in)</li>
+                    <li>Add loading and error states</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Components:</strong> LikeButton | <strong>API:</strong> /api/resources/[id]/like
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 3: Bookmark Functionality (Day 1-2)</div>
+                <ul class="task-list">
+                    <li>Create API routes (POST /api/resources/[id]/bookmark, DELETE)</li>
+                    <li>Build BookmarkButton component</li>
+                    <li>Implement optimistic updates</li>
+                    <li>Add animation on bookmark/unbookmark</li>
+                    <li>Create /profile/bookmarks page</li>
+                    <li>Display user's bookmarked resources in grid</li>
+                    <li>Add "remove bookmark" option</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Components:</strong> BookmarkButton | <strong>Pages:</strong> /profile/bookmarks
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 4: Integration & Testing (Day 2)</div>
+                <ul class="task-list">
+                    <li>Add like/bookmark buttons to ResourceCard</li>
+                    <li>Add like/bookmark buttons to ResourceDetail page</li>
+                    <li>Test concurrent operations (rapid clicking)</li>
+                    <li>Test with/without authentication</li>
+                    <li>Add toast notifications on success/error</li>
+                    <li>Implement keyboard shortcuts (L for like, B for bookmark)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card">
+            <div class="feature-header">
+                <div class="feature-number">5</div>
+                <div class="feature-title">Submit Resource Feature</div>
+                <div class="timeline">⏱️ 2-3 days</div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 1: Form Design (Day 1)</div>
+                <ul class="task-list">
+                    <li>Create /submit page with authentication guard</li>
+                    <li>Build multi-step form (URL → Details → Review)</li>
+                    <li>Add URL input field with validation</li>
+                    <li>Implement metadata fetching (Open Graph, title, description)</li>
+                    <li>Add skill/language selector (searchable dropdown)</li>
+                    <li>Add resource type selector (radio buttons or dropdown)</li>
+                    <li>Add optional fields (tags, custom description)</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>Pages:</strong> /submit | <strong>Components:</strong> SubmitForm, URLPreview, SkillSelector
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 2: URL Metadata Extraction (Day 1-2)</div>
+                <ul class="task-list">
+                    <li>Create API route for URL metadata (POST /api/extract-metadata)</li>
+                    <li>Use cheerio or similar to parse Open Graph tags</li>
+                    <li>Extract title, description, image, domain</li>
+                    <li>Handle errors gracefully (fallback to user input)</li>
+                    <li>Add rate limiting to prevent abuse</li>
+                    <li>Display live preview as user types URL</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>API:</strong> /api/extract-metadata | <strong>Libraries:</strong> cheerio, metascraper
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 3: Form Submission (Day 2)</div>
+                <ul class="task-list">
+                    <li>Create API route (POST /api/resources)</li>
+                    <li>Validate form data with Zod schema</li>
+                    <li>Check for duplicate URLs (prevent spam)</li>
+                    <li>Insert resource into database</li>
+                    <li>Handle thumbnail upload/storage (if custom)</li>
+                    <li>Add success message and redirect to resource page</li>
+                    <li>Implement form error handling</li>
+                </ul>
+                <div class="tech-stack">
+                    <strong>API:</strong> /api/resources | <strong>Validation:</strong> Zod schemas
+                </div>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Stage 4: Polish & UX (Day 2-3)</div>
+                <ul class="task-list">
+                    <li>Add form progress indicator</li>
+                    <li>Implement auto-save to localStorage</li>
+                    <li>Add helpful tooltips and examples</li>
+                    <li>Create submission guidelines page</li>
+                    <li>Add link to guidelines in submit form</li>
+                    <li>Test edge cases (invalid URLs, special characters)</li>
+                    <li>Add "Recently Added" section on home page</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <h2>📊 Development Timeline Summary</h2>
+        <div class="feature-card">
+            <h3>Total MVP Timeline: 11-15 days</h3>
+            <div style="color: #b0b0b0; margin: 20px 0; line-height: 1.8;">
+                <strong style="color: #667eea;">Week 1:</strong> Setup + Auth + Skills System (Days 1-7)<br>
+                <strong style="color: #667eea;">Week 2:</strong> Resources + Interactions + Submit Feature (Days 8-15)<br>
+                <strong style="color: #667eea;">Week 3:</strong> Testing, Polish, and Launch Preparation
+            </div>
+
+            <h3 style="margin-top: 40px;">Tech Stack Overview</h3>
+            <div class="stage">
+                <div class="stage-title">Frontend</div>
+                <ul class="task-list">
+                    <li>Next.js 14 (App Router)</li>
+                    <li>TypeScript</li>
+                    <li>Tailwind CSS</li>
+                    <li>shadcn/ui components</li>
+                    <li>Framer Motion (animations)</li>
+                    <li>TanStack Query (data fetching)</li>
+                    <li>React Hook Form + Zod (forms)</li>
+                </ul>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Backend & Database</div>
+                <ul class="task-list">
+                    <li>Supabase (PostgreSQL database)</li>
+                    <li>Supabase Auth</li>
+                    <li>Supabase Storage (for images)</li>
+                    <li>Row Level Security (RLS)</li>
+                    <li>Edge Functions (if needed)</li>
+                </ul>
+            </div>
+
+            <div class="stage">
+                <div class="stage-title">Additional Tools</div>
+                <ul class="task-list">
+                    <li>Vercel (deployment)</li>
+                    <li>Cheerio/Metascraper (URL metadata)</li>
+                    <li>Lucide Icons (icon library)</li>
+                    <li>React Markdown (content rendering)</li>
+                    <li>Sonner (toast notifications)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 16px; text-align: center; margin: 60px 0;">
+            <h2 style="color: white; border: none; padding: 0; margin: 0 0 15px 0;">Ready to Build? 🚀</h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.1em; margin: 0;">Let's start with Feature #1: Project Setup & Authentication</p>
+        </div>
+    </div>
+</body>
+</html>
