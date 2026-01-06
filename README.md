@@ -1,2 +1,2 @@
-# SkillNest
-this is a platform for users to find resources road maps and more on skills they want to learn
+SkillNest
+SkillNest is a comprehensive learning resource platform designed to help users find, share, and organize educational content across various skills and programming languages.
