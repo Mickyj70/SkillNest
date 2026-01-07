@@ -3,6 +3,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import PillSelect from "@/components/PillSelect";
+
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -84,51 +86,21 @@ export default function SignUp() {
             required
           />
 
-          {/* Profession Dropdown */}
-          <div className="relative w-full group">
-            <select
-              value={profession}
-              onChange={(e) => setProfession(e.target.value)}
-              className="w-full rounded-full border border-surface bg-background py-3 px-4 pr-12 text-lg text-text-secondary focus:border-primary focus:outline-none appearance-none hover:border-purple-500 transition-colors duration-300 ease-in-out"
-              required
-            >
-              <option value="" disabled>
-                Select Profession
-              </option>
-              {professions.map((prof) => (
-                <option key={prof} value={prof}>
-                  {prof}
-                </option>
-              ))}
-            </select>
+          {/* Profession */}
+<PillSelect
+  value={profession}
+  onChange={setProfession}
+  options={professions}
+  placeholder="Select Profession"
+/>
 
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary group-hover:text-purple-500">
-              ▼
-            </span>
-          </div>
-
-          {/* Skill Dropdown */}
-          <div className="relative w-full group">
-            <select
-              value={skill}
-              onChange={(e) => setSkill(e.target.value)}
-              className="w-full rounded-full border border-surface bg-background py-3 px-4 pr-12 text-lg text-text-secondary focus:border-primary focus:outline-none appearance-none hover:border-purple-500 transition-colors duration-300 ease-in-out"
-              required
-            >
-              <option value="" disabled>
-                Select Skill Level
-              </option>
-              {skills.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary group-hover:text-purple-500">
-              ▼
-            </span>
-          </div>
+{/* Skill */}
+<PillSelect
+  value={skill}
+  onChange={setSkill}
+  options={skills}
+  placeholder="Select Skill Level"
+/>
 
           {/* Submit Button */}
           <button
