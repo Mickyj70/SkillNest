@@ -2,7 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase/client";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,10 +13,25 @@ export default function Login() {
   // Placeholder for error messages
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    console.log("SUPABASE URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder: just console log for now
-    console.log({ email, password, remember });
+    setError("");
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    console.log("Login successful");
     setError(""); // clear error for now
   };
 
@@ -31,21 +47,19 @@ export default function Login() {
         </p>
 
         {/* Error message */}
-        {error && (
-          <p className="mb-4 text-center text-red-500">{error}</p>
-        )}
+        {error && <p className="mb-4 text-center text-red-500">{error}</p>}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Email */}
           <input
-  type="email"
-  placeholder="Email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  className="w-full rounded-full border border-surface bg-background px-4 py-3 text-lg text-text-secondary focus:border-primary focus:outline-none hover:border-purple-500 transition-colors"
-  required
-/>
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-full border border-surface bg-background px-4 py-3 text-lg text-text-secondary focus:border-primary focus:outline-none hover:border-purple-500 transition-colors"
+            required
+          />
 
           {/* Password */}
           <input
@@ -53,7 +67,7 @@ export default function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-  className="w-full rounded-full border border-surface bg-background px-4 py-3 text-lg text-text-secondary focus:border-primary focus:outline-none hover:border-purple-500 transition-colors"
+            className="w-full rounded-full border border-surface bg-background px-4 py-3 text-lg text-text-secondary focus:border-primary focus:outline-none hover:border-purple-500 transition-colors"
             required
           />
 
@@ -85,10 +99,7 @@ export default function Login() {
           >
             Forgot password?
           </Link>
-          <Link
-            href="/auth/signup"
-            className="hover:text-primary underline"
-          >
+          <Link href="/auth/signup" className="hover:text-primary underline">
             Sign Up
           </Link>
         </div>

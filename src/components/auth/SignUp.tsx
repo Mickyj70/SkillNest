@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase/supabaseClient";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -11,6 +12,8 @@ export default function SignUp() {
   const [profession, setProfession] = useState("");
   const [skill, setSkill] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   // Profession options
   const professions = [
@@ -32,9 +35,31 @@ export default function SignUp() {
   // Skill levels
   const skills = ["Beginner", "Intermediate", "Senior"];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({ name, email, password, profession, skill });
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        name,
+        profession,
+        skill,
+      },
+    },
+  });
+
+  setLoading(false);
+
+  if (error) {
+    setError(error.message);
+    return;
+  }
+
+  console.log("Signup successful:", data);
     setError(""); // clear error for now
   };
 
