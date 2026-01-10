@@ -3,9 +3,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/supabaseClient";
 
 export default function SignUp() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +16,6 @@ export default function SignUp() {
   const [skill, setSkill] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   // Profession options
   const professions = [
@@ -35,32 +37,30 @@ export default function SignUp() {
   // Skill levels
   const skills = ["Beginner", "Intermediate", "Senior"];
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError("");
-  setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        name,
-        profession,
-        skill,
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name, profession, skill },
       },
-    },
-  });
+    });
 
-  setLoading(false);
+    setLoading(false);
 
-  if (error) {
-    setError(error.message);
-    return;
-  }
+    if (error) {
+      setError(error.message);
+      return;
+    }
 
-  console.log("Signup successful:", data);
-    setError(""); // clear error for now
+    console.log("Signup successful:", data);
+
+    // Redirect to login page after successful signup
+    router.push("/auth/login");
   };
 
   return (
@@ -126,7 +126,6 @@ export default function SignUp() {
                 </option>
               ))}
             </select>
-
             <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary group-hover:text-purple-500">
               ▼
             </span>
@@ -149,20 +148,19 @@ export default function SignUp() {
                 </option>
               ))}
             </select>
-
             <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary group-hover:text-purple-500">
               ▼
             </span>
           </div>
 
           {/* Submit Button */}
-          <Link
-  href="/login"
-  className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors text-center"
->
-  Sign Up
-</Link>
-
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Signing Up..." : "Sign Up"}
+          </button>
         </form>
 
         {/* Link to Login */}
