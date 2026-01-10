@@ -3,16 +3,19 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import PillSelect from "@/components/PillSelect";
-
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/supabaseClient";
 
 export default function SignUp() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [profession, setProfession] = useState("");
   const [skill, setSkill] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Profession options
   const professions = [
@@ -34,10 +37,30 @@ export default function SignUp() {
   // Skill levels
   const skills = ["Beginner", "Intermediate", "Senior"];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name, email, password, profession, skill });
-    setError(""); // clear error for now
+    setError("");
+    setLoading(true);
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name, profession, skill },
+      },
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    console.log("Signup successful:", data);
+
+    // Redirect to login page after successful signup
+    router.push("/auth/login");
   };
 
   return (
@@ -86,28 +109,57 @@ export default function SignUp() {
             required
           />
 
-          {/* Profession */}
-<PillSelect
-  value={profession}
-  onChange={setProfession}
-  options={professions}
-  placeholder="Select Profession"
-/>
+          {/* Profession Dropdown */}
+          <div className="relative w-full group">
+            <select
+              value={profession}
+              onChange={(e) => setProfession(e.target.value)}
+              className="w-full rounded-full border border-surface bg-background py-3 px-4 pr-12 text-lg text-text-secondary focus:border-primary focus:outline-none appearance-none hover:border-purple-500 transition-colors duration-300 ease-in-out"
+              required
+            >
+              <option value="" disabled>
+                Select Profession
+              </option>
+              {professions.map((prof) => (
+                <option key={prof} value={prof}>
+                  {prof}
+                </option>
+              ))}
+            </select>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary group-hover:text-purple-500">
+              ▼
+            </span>
+          </div>
 
-{/* Skill */}
-<PillSelect
-  value={skill}
-  onChange={setSkill}
-  options={skills}
-  placeholder="Select Skill Level"
-/>
+          {/* Skill Dropdown */}
+          <div className="relative w-full group">
+            <select
+              value={skill}
+              onChange={(e) => setSkill(e.target.value)}
+              className="w-full rounded-full border border-surface bg-background py-3 px-4 pr-12 text-lg text-text-secondary focus:border-primary focus:outline-none appearance-none hover:border-purple-500 transition-colors duration-300 ease-in-out"
+              required
+            >
+              <option value="" disabled>
+                Select Skill Level
+              </option>
+              {skills.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary group-hover:text-purple-500">
+              ▼
+            </span>
+          </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors"
+            disabled={loading}
+            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
 

@@ -53,7 +53,7 @@ export default function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-  className="w-full rounded-full border border-surface bg-background px-4 py-3 text-lg text-text-secondary focus:border-primary focus:outline-none hover:border-purple-500 transition-colors"
+            className="w-full rounded-full border border-surface bg-background px-4 py-3 text-lg text-text-secondary focus:border-primary focus:outline-none hover:border-purple-500 transition-colors"
             required
           />
 
@@ -69,12 +69,12 @@ export default function Login() {
           </label>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors"
+          <Link
+            href="/dashboard"
+            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors text-center"
           >
             Sign In
-          </button>
+          </Link>
         </form>
 
         {/* Links */}
@@ -85,10 +85,7 @@ export default function Login() {
           >
             Forgot password?
           </Link>
-          <Link
-            href="/auth/signup"
-            className="hover:text-primary underline"
-          >
+          <Link href="/auth/signup" className="hover:text-primary underline">
             Sign Up
           </Link>
         </div>
