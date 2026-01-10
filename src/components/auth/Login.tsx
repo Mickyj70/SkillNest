@@ -83,12 +83,12 @@ export default function Login() {
           </label>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors"
+          <Link
+            href="/dashboard"
+            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors text-center"
           >
             Sign In
-          </button>
+          </Link>
         </form>
 
         {/* Links */}

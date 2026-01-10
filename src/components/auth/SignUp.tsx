@@ -156,12 +156,13 @@ export default function SignUp() {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors"
-          >
-            Sign Up
-          </button>
+          <Link
+  href="/login"
+  className="mt-2 w-full rounded-full bg-primary px-6 py-3 font-medium text-white hover:bg-primary-dark transition-colors text-center"
+>
+  Sign Up
+</Link>
+
         </form>
 
         {/* Link to Login */}
