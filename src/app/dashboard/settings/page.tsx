@@ -1,16 +1,22 @@
 import ProfileForm from "@/app/profile/profile-form";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function SettingsPage() {
-  // Mock Profile for UI Development (Same as ProfilePage)
-  const profile = {
-    id: "mock-id",
-    full_name: "Demo User",
-    username: "demouser",
-    avatar_url: "",
-    bio: "Just building the UI for now!",
-    role: "admin",
-    updated_at: new Date().toISOString(),
-  };
+export default async function SettingsPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
 
   return (
     <div className="space-y-8">

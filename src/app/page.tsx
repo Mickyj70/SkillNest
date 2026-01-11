@@ -1,9 +1,12 @@
-"use client";
-
 import { HomeSearch } from "@/components/home/HomeSearch";
 import { SkillsCarousel } from "@/components/home/SkillsCarousel";
+import { getSkills } from "./skills/actions";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const skills = await getSkills();
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -29,13 +32,13 @@ export default function Home() {
 
         {/* Dynamic Search Component */}
         <div className="w-full max-w-2xl">
-          <HomeSearch />
+          <HomeSearch skills={skills} />
         </div>
       </section>
 
       {/* Popular Skills Carousel */}
       <section className="border-y border-surface bg-surface/10 py-12">
-        <SkillsCarousel />
+        <SkillsCarousel skills={skills} />
       </section>
 
       {/* Value Props Section */}

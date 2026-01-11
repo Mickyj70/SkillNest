@@ -1,12 +1,36 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, ThumbsUp, Bookmark, TrendingUp } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  // Use name from profile, metadata, or email fallback
+  const displayName =
+    profile?.full_name ||
+    user.user_metadata?.full_name ||
+    user.email?.split("@")[0] ||
+    "User";
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, Demo User!
+          Welcome back, {displayName}!
         </h1>
         <p className="text-text-secondary mt-2">
           Here&apos;s what&apos;s happening with your contributions.
@@ -20,10 +44,8 @@ export default function DashboardPage() {
             <Eye className="h-4 w-4 text-text-secondary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12,345</div>
-            <p className="text-xs text-text-secondary">
-              +20.1% from last month
-            </p>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-text-secondary">No views yet</p>
           </CardContent>
         </Card>
         <Card className="border-surface bg-surface/20">
@@ -32,8 +54,8 @@ export default function DashboardPage() {
             <ThumbsUp className="h-4 w-4 text-text-secondary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">423</div>
-            <p className="text-xs text-text-secondary">+15% from last month</p>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-text-secondary">No likes yet</p>
           </CardContent>
         </Card>
         <Card className="border-surface bg-surface/20">
@@ -42,8 +64,8 @@ export default function DashboardPage() {
             <Bookmark className="h-4 w-4 text-text-secondary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">89</div>
-            <p className="text-xs text-text-secondary">+5 new this week</p>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-text-secondary">No bookmarks saved</p>
           </CardContent>
         </Card>
         <Card className="border-surface bg-surface/20">
@@ -54,8 +76,10 @@ export default function DashboardPage() {
             <TrendingUp className="h-4 w-4 text-text-secondary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4.3%</div>
-            <p className="text-xs text-text-secondary">+1.2% from last month</p>
+            <div className="text-2xl font-bold">0%</div>
+            <p className="text-xs text-text-secondary">
+              Start engaging to see stats
+            </p>
           </CardContent>
         </Card>
       </div>

@@ -4,9 +4,19 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { MOCK_SKILLS } from "@/lib/data";
 
-export function HomeSearch() {
+interface Skill {
+  name: string;
+  slug: string;
+  category?: string;
+  categories?: { name: string } | null;
+}
+
+interface HomeSearchProps {
+  skills: Skill[];
+}
+
+export function HomeSearch({ skills }: HomeSearchProps) {
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
@@ -25,9 +35,9 @@ export function HomeSearch() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredSkills = MOCK_SKILLS.filter((skill) =>
-    skill.name.toLowerCase().includes(query.toLowerCase())
-  ).slice(0, 5); // Limit to top 5 suggestions
+  const filteredSkills = skills
+    .filter((skill) => skill.name.toLowerCase().includes(query.toLowerCase()))
+    .slice(0, 5); // Limit to top 5 suggestions
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,14 +84,14 @@ export function HomeSearch() {
                     className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition-colors hover:bg-surface/50"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface/50">
-                      {skill.icon}
+                      <div className="h-6 w-6 rounded-full bg-primary/20" />
                     </div>
                     <div>
                       <span className="block font-bold text-foreground">
                         {skill.name}
                       </span>
                       <span className="block text-xs text-text-secondary uppercase tracking-wider">
-                        {skill.category}
+                        {skill.categories?.name || "Skill"}
                       </span>
                     </div>
                   </button>

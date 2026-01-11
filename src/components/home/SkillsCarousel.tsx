@@ -2,12 +2,27 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { MOCK_SKILLS } from "@/lib/data";
 import { SkillCard } from "@/components/SkillCard";
 
-export function SkillsCarousel() {
+interface Skill {
+  id: string;
+  name: string;
+  slug: string;
+  categories?: { name: string } | null;
+}
+
+interface SkillsCarouselProps {
+  skills: Skill[];
+}
+
+export function SkillsCarousel({ skills }: SkillsCarouselProps) {
+  // Handle empty state
+  if (!skills || skills.length === 0) {
+    return null;
+  }
+
   // Duplicate arrays to create seamless loop
-  const duplicatedSkills = [...MOCK_SKILLS, ...MOCK_SKILLS];
+  const duplicatedSkills = [...skills, ...skills, ...skills];
 
   return (
     <div className="w-full overflow-hidden py-10">
@@ -34,13 +49,13 @@ export function SkillsCarousel() {
         <motion.div
           className="flex gap-6 w-max"
           animate={{
-            x: [0, -1920], // Adjust based on total width
+            x: [0, -2500], // Adjust based on total width
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 40,
+              duration: 60,
               ease: "linear",
             },
           }}
@@ -51,7 +66,11 @@ export function SkillsCarousel() {
               key={`${skill.slug}-${index}`}
               className="w-[280px] shrink-0 transform-gpu"
             >
-              <SkillCard {...skill} />
+              <SkillCard
+                name={skill.name}
+                slug={skill.slug}
+                category={skill.categories?.name || "Skill"}
+              />
             </div>
           ))}
         </motion.div>

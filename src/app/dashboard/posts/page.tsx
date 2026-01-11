@@ -17,34 +17,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Edit2, Trash2, ExternalLink, Plus } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function MyPostsPage() {
-  const posts = [
-    {
-      id: 1,
-      title: "Introduction to React Server Components",
-      type: "Article",
-      status: "Published",
-      views: 1205,
-      date: "2024-03-15",
-    },
-    {
-      id: 2,
-      title: "Mastering Tailwind CSS Grid",
-      type: "Video",
-      status: "Published",
-      views: 854,
-      date: "2024-03-10",
-    },
-    {
-      id: 3,
-      title: "Next.js 14 Full Course",
-      type: "Course",
-      status: "Pending",
-      views: 0,
-      date: "2024-03-18",
-    },
-  ];
+export default async function MyPostsPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: posts } = await supabase
+    .from("resources")
+    .select(
+      `
+        *,
+        skills (
+            name
+        )
+    `
+    )
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
 
   return (
     <div className="space-y-8">
@@ -55,7 +52,7 @@ export default function MyPostsPage() {
             Manage your submitted resources.
           </p>
         </div>
-        <Link href="/submit">
+        <Link href="/dashboard/posts/new">
           <Button className="bg-primary hover:bg-primary-dark">
             <Plus className="mr-2 h-4 w-4" /> Create New Post
           </Button>
@@ -74,6 +71,7 @@ export default function MyPostsPage() {
             <TableHeader>
               <TableRow className="border-surface hover:bg-transparent">
                 <TableHead>Title</TableHead>
+                <TableHead>Skill</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Views</TableHead>
@@ -82,54 +80,84 @@ export default function MyPostsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {posts.map((post) => (
-                <TableRow
-                  key={post.id}
-                  className="border-surface hover:bg-surface/50"
-                >
-                  <TableCell className="font-medium">{post.title}</TableCell>
-                  <TableCell>{post.type}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="secondary"
-                      className={
-                        post.status === "Published"
-                          ? "bg-success/20 text-success hover:bg-success/30"
-                          : "bg-warning/20 text-warning hover:bg-warning/30"
-                      }
-                    >
-                      {post.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{post.views.toLocaleString()}</TableCell>
-                  <TableCell>{post.date}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 hover:text-primary"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 hover:text-primary"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+              {posts?.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="h-24 text-center text-text-secondary"
+                  >
+                    No posts found. Create one to get started!
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                posts?.map((post) => (
+                  <TableRow
+                    key={post.id}
+                    className="border-surface hover:bg-surface/50"
+                  >
+                    <TableCell className="font-medium">{post.title}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className="border-primary/20 bg-primary/5 text-primary"
+                      >
+                        {post.skills?.name || "Unknown"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{post.type}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="secondary"
+                        className={
+                          post.status === "published"
+                            ? "bg-success/20 text-success hover:bg-success/30"
+                            : "bg-warning/20 text-warning hover:bg-warning/30"
+                        }
+                      >
+                        {post.status.charAt(0).toUpperCase() +
+                          post.status.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{post.views.toLocaleString()}</TableCell>
+                    <TableCell>
+                      {new Date(post.created_at).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        {post.url && (
+                          <a
+                            href={post.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:text-primary"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </a>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 hover:text-primary"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>
