@@ -2,19 +2,48 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Menu, X, Rocket, Award, Shield, User } from "lucide-react";
+import {
+  Search,
+  Menu,
+  X,
+  Rocket,
+  Award,
+  Shield,
+  User,
+  LogOut,
+  Settings as SettingsIcon,
+  LayoutDashboard,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { User as SupabaseUser } from "@supabase/supabase-js";
+import { logout } from "@/app/auth/actions";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function Navbar() {
+interface NavbarProps {
+  user: SupabaseUser | null;
+}
+
+export default function Navbar({ user }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
     { name: "Browse Skills", href: "/skills", icon: Rocket },
     { name: "Trending", href: "#", icon: Award },
     { name: "Roadmaps", href: "#", icon: Award },
-    { name: "Dashboard", href: "/dashboard", icon: User },
-    { name: "Admin", href: "/admin", icon: Shield },
   ];
+
+  // Admin link only if user needs it (optional logic)
+  if (user) {
+    // navLinks.push({ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard });
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-surface bg-background/80 backdrop-blur-md">
@@ -40,6 +69,13 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+            {/* Show Admin link separately or based on role later */}
+            {/* <Link
+              href="/admin"
+              className="transition-colors hover:text-foreground"
+            >
+              Admin
+            </Link> */}
           </nav>
         </div>
 
@@ -50,18 +86,76 @@ export default function Navbar() {
           </button>
 
           <div className="hidden sm:flex items-center gap-2">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-foreground transition-colors"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
-            >
-              Sign up
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 rounded-full border border-surface bg-surface/50 p-1 pl-3 pr-1 transition-colors hover:bg-surface focus:outline-none">
+                    <span className="text-sm font-medium text-foreground max-w-[100px] truncate">
+                      {user.user_metadata.full_name ||
+                        user.email?.split("@")[0]}
+                    </span>
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.user_metadata.avatar_url} />
+                      <AvatarFallback className="bg-primary/20 text-primary">
+                        {(
+                          user.user_metadata.full_name?.[0] ||
+                          user.email?.[0] ||
+                          "U"
+                        ).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="cursor-pointer">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings" className="cursor-pointer">
+                      <SettingsIcon className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/dashboard/bookmarks"
+                      className="cursor-pointer"
+                    >
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-500 focus:text-red-500 cursor-pointer"
+                    onClick={() => logout()}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-foreground transition-colors"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -94,22 +188,70 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-              <div className="mt-4 grid grid-cols-2 gap-4">
-                <Link
-                  href="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-xl border border-surface bg-surface py-3 text-center text-sm font-bold text-white"
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-xl bg-primary py-3 text-center text-sm font-bold text-white shadow-lg shadow-primary/25"
-                >
-                  Sign up
-                </Link>
-              </div>
+
+              <div className="my-2 h-px bg-surface" />
+
+              {user ? (
+                <>
+                  <div className="px-4 py-2">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.user_metadata.avatar_url} />
+                        <AvatarFallback className="bg-primary/20 text-primary">
+                          {(
+                            user.user_metadata.full_name?.[0] ||
+                            user.email?.[0] ||
+                            "U"
+                          ).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-foreground">
+                          {user.user_metadata.full_name}
+                        </span>
+                        <span className="text-xs text-text-secondary">
+                          {user.email}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium text-text-secondary hover:bg-surface hover:text-primary transition-all"
+                  >
+                    <LayoutDashboard className="h-5 w-5" />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-base font-medium text-red-500 hover:bg-red-500/10 transition-all text-left"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-xl border border-surface bg-surface py-3 text-center text-sm font-bold text-white"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-xl bg-primary py-3 text-center text-sm font-bold text-white shadow-lg shadow-primary/25"
+                  >
+                    Sign up
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { createClient } from "@/utils/supabase/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,17 +20,22 @@ export const metadata: Metadata = {
   description: "Discover and share the best learning resources for developers.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <Navbar />
+        <Navbar user={user} />
         <main>{children}</main>
         <Toaster position="top-center" />
       </body>
