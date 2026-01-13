@@ -115,6 +115,17 @@ export default function Navbar({ user }: NavbarProps) {
                       <span>Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
+                  {user.user_metadata?.role === "admin" && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/admin"
+                        className="cursor-pointer text-primary"
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        <span>Admin Console</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/settings" className="cursor-pointer">
                       <SettingsIcon className="mr-2 h-4 w-4" />

@@ -1,14 +1,20 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { LayoutDashboard, Users, FileText, Map, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  Map,
+  Settings,
+  Sparkles,
+} from "lucide-react";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  /* Produciton Auth (Disabled for UI Dev)
   const supabase = await createClient();
   const {
     data: { user },
@@ -28,11 +34,6 @@ export default async function AdminLayout({
   if (profile?.role !== "admin") {
     redirect("/");
   }
-  */
-
-  // Mock User for UI Development
-  const user = { id: "mock-id" };
-  const profile = { role: "admin" };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -69,6 +70,13 @@ export default async function AdminLayout({
           >
             <Map className="h-4 w-4" />
             Populate Roadmap
+          </Link>
+          <Link
+            href="/admin/skills"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium hover:bg-surface hover:text-primary transition-all"
+          >
+            <Sparkles className="h-4 w-4" />
+            Manage Skills
           </Link>
           <Link
             href="/admin/settings"

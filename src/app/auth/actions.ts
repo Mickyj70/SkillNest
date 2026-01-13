@@ -18,7 +18,19 @@ export async function login(formData: FormData) {
     return { error: error.message };
   }
 
+  // Fetch profile to check role
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", (await supabase.auth.getUser()).data.user?.id)
+    .single();
+
   revalidatePath("/", "layout");
+
+  if (profile?.role === "admin") {
+    redirect("/admin");
+  }
+
   redirect("/dashboard");
 }
 
