@@ -91,3 +91,49 @@ export async function getResourcesBySkillId(skillId: string) {
   }
   return data;
 }
+
+export async function getResource(id: string) {
+  const supabase = await createClient();
+
+  // Increment view count
+  await supabase.rpc("increment_resource_views", { resource_id: id });
+
+  const { data, error } = await supabase
+    .from("resources")
+    .select(
+      `
+      *,
+      skills (
+        name,
+        slug,
+        categories (
+          name
+        )
+      ),
+      profiles:user_id (
+        full_name,
+        avatar_url,
+        bio
+      ),
+      likes (count),
+      bookmarks (count),
+      comments (
+        id,
+        content,
+        created_at,
+        profiles:user_id (
+          full_name,
+          avatar_url
+        )
+      )
+    `
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching resource:", error);
+    return null;
+  }
+  return data;
+}

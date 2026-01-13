@@ -15,11 +15,14 @@ interface SkillData {
 }
 
 interface Resource {
+  id: string;
   title: string;
   description: string | null;
   type: string;
   level: string;
   url: string | null;
+  duration: string | null;
+  thumbnail_url: string | null;
   profiles: { full_name: string | null } | null;
   likes: number;
 }
@@ -129,7 +132,8 @@ export default function SkillDetailClient({
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredResources.map((resource, index) => (
               <ResourceCard
-                key={index}
+                key={resource.id || index}
+                id={resource.id}
                 title={resource.title}
                 description={resource.description || ""}
                 type={resource.type as any}
@@ -137,6 +141,8 @@ export default function SkillDetailClient({
                 url={resource.url || ""}
                 author={resource.profiles?.full_name || "Community Member"}
                 likes={resource.likes}
+                duration={resource.duration || undefined}
+                thumbnail_url={resource.thumbnail_url || undefined}
               />
             ))}
           </div>
