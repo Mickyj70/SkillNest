@@ -21,13 +21,86 @@ import {
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
+import { toggleLike, toggleBookmark, addComment } from "@/app/resource/actions";
+import { toast } from "sonner";
+import { useState, useTransition } from "react";
+
 interface ResourceDetailProps {
-  resource: any; // Using any for brevity in this complex join, ideally typed
+  resource: any;
+  userId?: string;
+  initialLiked?: boolean;
+  initialBookmarked?: boolean;
 }
 
 export default function ResourceDetailClient({
   resource,
+  userId,
+  initialLiked = false,
+  initialBookmarked = false,
 }: ResourceDetailProps) {
+  const [isPending, startTransition] = useTransition();
+  const [comment, setComment] = useState("");
+  const [isLiked, setIsLiked] = useState(initialLiked);
+  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
+  const [likesCount, setLikesCount] = useState(
+    resource.likes_stats?.[0]?.count || 0
+  );
+
+  const handleToggleLike = () => {
+    if (!userId) {
+      toast.error("Please sign in to like resources.");
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await toggleLike(resource.id);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        setIsLiked(!isLiked);
+        setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
+        toast.success(isLiked ? "Removed like" : "Liked resource!");
+      }
+    });
+  };
+
+  const handleToggleBookmark = () => {
+    if (!userId) {
+      toast.error("Please sign in to save resources.");
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await toggleBookmark(resource.id);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        setIsBookmarked(!isBookmarked);
+        toast.success(
+          isBookmarked ? "Removed from bookmarks" : "Saved to bookmarks!"
+        );
+      }
+    });
+  };
+
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userId) {
+      toast.error("Please sign in to comment.");
+      return;
+    }
+    if (!comment.trim()) return;
+
+    startTransition(async () => {
+      const result = await addComment(resource.id, comment);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        setComment("");
+        toast.success("Comment added!");
+      }
+    });
+  };
   const publishedDate = new Date(resource.created_at).toLocaleDateString(
     "en-US",
     {
@@ -141,25 +214,47 @@ export default function ResourceDetailClient({
           {/* Social Actions */}
           <div className="flex flex-wrap items-center gap-4">
             <Button
-              variant="outline"
-              className="border-surface hover:bg-surface gap-2 rounded-xl"
+              variant={isLiked ? "default" : "outline"}
+              className={`gap-2 rounded-xl transition-all ${
+                isLiked
+                  ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
+                  : "border-surface hover:bg-surface hover:border-primary/50"
+              }`}
+              onClick={handleToggleLike}
+              disabled={isPending}
             >
-              <ThumbsUp className="h-4 w-4" />
-              {resource.likes?.[0]?.count || 0} Likes
+              <ThumbsUp
+                className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`}
+              />
+              {likesCount} Likes
+            </Button>
+            <Button
+              variant={isBookmarked ? "default" : "outline"}
+              className={`gap-2 rounded-xl transition-all ${
+                isBookmarked
+                  ? "bg-secondary text-white border-secondary shadow-lg shadow-secondary/20"
+                  : "border-surface hover:bg-surface hover:border-primary/50"
+              }`}
+              onClick={handleToggleBookmark}
+              disabled={isPending}
+            >
+              <Bookmark
+                className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`}
+              />
+              {isBookmarked ? "Saved" : "Save"}
             </Button>
             <Button
               variant="outline"
-              className="border-surface hover:bg-surface gap-2 rounded-xl"
+              className="border-surface hover:bg-surface gap-2 rounded-xl border-surface hover:border-primary/50"
+              onClick={() => {
+                document
+                  .getElementById("comment-input")
+                  ?.scrollIntoView({ behavior: "smooth" });
+                document.getElementById("comment-input")?.focus();
+              }}
             >
-              <Bookmark className="h-4 w-4" />
-              {resource.bookmarks?.[0]?.count || 0} Save
-            </Button>
-            <Button
-              variant="outline"
-              className="border-surface hover:bg-surface gap-2 rounded-xl"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
+              <MessageSquare className="h-4 w-4" />
+              Comment
             </Button>
             <Button
               variant="ghost"
@@ -178,6 +273,25 @@ export default function ResourceDetailClient({
               <MessageSquare className="h-6 w-6 text-primary" />
               Comments ({resource.comments?.length || 0})
             </h3>
+            <form onSubmit={handleAddComment} className="relative">
+              <textarea
+                id="comment-input"
+                className="w-full bg-surface/20 border border-surface rounded-2xl p-4 pr-32 min-h-[100px] text-sm focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all resize-none"
+                placeholder="Share your thoughts or ask a question..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <div className="absolute bottom-4 right-4">
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="bg-primary hover:bg-primary-dark font-bold rounded-xl"
+                  disabled={isPending || !comment.trim()}
+                >
+                  Post Comment
+                </Button>
+              </div>
+            </form>
 
             <div className="space-y-4">
               {resource.comments?.map((comment: any) => (

@@ -292,7 +292,9 @@ export default function CreatePostForm({
                 <Image
                   src={thumbnailUrl}
                   alt="Thumbnail preview"
-                  className="object-cover w-full h-full"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 384px"
                 />
                 <button
                   type="button"

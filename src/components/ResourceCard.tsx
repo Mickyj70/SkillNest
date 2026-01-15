@@ -42,15 +42,16 @@ export function ResourceCard({
   duration,
   thumbnail_url,
 }: ResourceCardProps) {
-  const TypeIcon =
-    {
-      Video: PlayCircle,
-      Article: FileText,
-      Course: Globe,
-      Book: FileText,
-      Tool: Globe,
-      Other: Globe,
-    }[type as any] || Globe;
+  const icons = {
+    Video: PlayCircle,
+    Article: FileText,
+    Course: Globe,
+    Book: FileText,
+    Tool: Globe,
+    Other: Globe,
+  };
+
+  const TypeIcon = icons[type as keyof typeof icons] || Globe;
 
   return (
     <Card className="flex flex-col border-surface bg-surface/30 backdrop-blur-sm transition-all hover:border-primary/50 overflow-hidden group">

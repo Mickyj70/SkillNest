@@ -76,7 +76,7 @@ export async function getResourcesBySkillId(skillId: string) {
     .select(
       `
       *,
-      profiles:user_id (
+      profiles (
         full_name
       )
     `
@@ -110,18 +110,18 @@ export async function getResource(id: string) {
           name
         )
       ),
-      profiles:user_id (
+      profiles (
         full_name,
         avatar_url,
         bio
       ),
-      likes (count),
-      bookmarks (count),
+      likes_stats:likes(count),
+      bookmarks_stats:bookmarks(count),
       comments (
         id,
         content,
         created_at,
-        profiles:user_id (
+        profiles (
           full_name,
           avatar_url
         )
