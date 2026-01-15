@@ -37,7 +37,7 @@ export default function Navbar({ user }: NavbarProps) {
   const navLinks = [
     { name: "Browse Skills", href: "/skills", icon: Rocket },
     { name: "Trending", href: "#", icon: Award },
-    { name: "Roadmaps", href: "#", icon: Award },
+    { name: "Roadmaps", href: "/admin/roadmaps", icon: Award },
   ];
 
   // Admin link only if user needs it (optional logic)
