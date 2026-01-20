@@ -1,4 +1,4 @@
-import { getFullRoadmap, createRoadmap, addRoadmapStep } from "../../actions";
+import { getFullRoadmap, createRoadmap, addRoadmapStep, deleteRoadmapStep, updateRoadmap, publishRoadmap, unpublishRoadmap } from "../../actions";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,8 @@ import {
   ChevronUp,
   ChevronDown,
   BookOpen,
+  Globe,
+  EyeOff,
   ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
@@ -42,6 +44,34 @@ export default async function RoadmapDetailBuilder({ params }: Props) {
     const orderIndex = roadmap.roadmap_steps.length;
     await addRoadmapStep(roadmap.id, title, orderIndex);
   }
+
+  async function handleDeleteStep(formData: FormData) {
+    "use server";
+    const stepId = formData.get("stepId") as string;
+    await deleteRoadmapStep(stepId);
+  }
+
+  async function handleUpdateRoadmap(formData: FormData) {
+    "use server";
+    if (!roadmap) return;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    await updateRoadmap(roadmap.id, title, description);
+  }
+
+  async function handlePublish() {
+    "use server";
+    if (!roadmap) return;
+    await publishRoadmap(roadmap.id);
+  }
+
+  async function handleUnpublish() {
+    "use server";
+    if (!roadmap) return;
+    await unpublishRoadmap(roadmap.id);
+  }
+
+  const isPublished = roadmap?.status === "published";
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
@@ -103,16 +133,77 @@ export default async function RoadmapDetailBuilder({ params }: Props) {
         <div className="space-y-8">
           {/* Roadmap Info */}
           <div className="rounded-2xl border border-surface bg-surface/30 p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="font-bold text-lg">{roadmap.title}</div>
-              <Button variant="outline" size="sm" className="border-surface">
-                <Save className="h-4 w-4 mr-2" />
-                Save Changes
-              </Button>
+            {/* Status Banner */}
+            <div className={`flex items-center justify-between p-4 rounded-xl border ${
+              isPublished 
+                ? "bg-success/10 border-success/20" 
+                : "bg-warning/10 border-warning/20"
+            }`}>
+              <div className="flex items-center gap-3">
+                {isPublished ? (
+                  <Globe className="h-5 w-5 text-success" />
+                ) : (
+                  <EyeOff className="h-5 w-5 text-warning" />
+                )}
+                <div>
+                  <div className={`font-bold text-sm ${
+                    isPublished ? "text-success" : "text-warning"
+                  }`}>
+                    {isPublished ? "Published" : "Draft"}
+                  </div>
+                  <div className="text-xs text-text-secondary">
+                    {isPublished 
+                      ? "This roadmap is visible to all users" 
+                      : "Only admins can see this roadmap"}
+                  </div>
+                </div>
+              </div>
+              
+              {isPublished ? (
+                <form action={handleUnpublish}>
+                  <Button 
+                    type="submit" 
+                    variant="outline" 
+                    size="sm"
+                    className="border-warning/30 text-warning hover:bg-warning/10"
+                  >
+                    <EyeOff className="h-4 w-4 mr-2" />
+                    Unpublish
+                  </Button>
+                </form>
+              ) : (
+                <form action={handlePublish}>
+                  <Button 
+                    type="submit" 
+                    size="sm"
+                    className="bg-success hover:bg-success/90 text-white"
+                  >
+                    <Globe className="h-4 w-4 mr-2" />
+                    Publish
+                  </Button>
+                </form>
+              )}
             </div>
-            <p className="text-sm text-text-secondary">
-              {roadmap.description || "No description provided."}
-            </p>
+
+            <form action={handleUpdateRoadmap}>
+              <div className="flex items-center gap-4 mb-4">
+                <Input
+                  name="title"
+                  defaultValue={roadmap.title}
+                  className="text-lg font-bold bg-transparent border-transparent hover:border-surface focus:border-primary px-0 h-auto py-1"
+                />
+                <Button type="submit" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Changes
+                </Button>
+              </div>
+              <Textarea
+                name="description"
+                defaultValue={roadmap.description || ""}
+                placeholder="No description provided."
+                className="min-h-[100px] bg-transparent border-transparent hover:border-surface focus:border-primary resize-none p-0"
+              />
+            </form>
           </div>
 
           {/* Steps List */}
@@ -148,13 +239,19 @@ export default async function RoadmapDetailBuilder({ params }: Props) {
                         <Button variant="ghost" size="icon" className="h-8 w-8">
                           <ChevronDown className="h-4 w-4" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+
+                        {/* ── Functional delete ── */}
+                        <form action={handleDeleteStep}>
+                          <input type="hidden" name="stepId" value={step.id} />
+                          <Button
+                            type="submit"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </form>
                       </div>
                     </div>
 

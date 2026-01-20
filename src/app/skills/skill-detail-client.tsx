@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ResourceCard } from "@/components/ResourceCard";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, TrendingUp, Star, Filter } from "lucide-react";
+import { BookOpen, TrendingUp, Star, Filter, Map, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 interface SkillData {
   id: string;
@@ -30,11 +32,13 @@ interface Resource {
 interface SkillDetailClientProps {
   skill: SkillData;
   resources: Resource[];
+  hasRoadmap?: boolean;
 }
 
 export default function SkillDetailClient({
   skill,
   resources,
+  hasRoadmap = false,
 }: SkillDetailClientProps) {
   const [activeTab, setActiveTab] = useState("all");
 
@@ -66,6 +70,15 @@ export default function SkillDetailClient({
             <p className="text-xl text-text-secondary leading-relaxed">
               {skill.description || `Learning resources for ${skill.name}.`}
             </p>
+            {hasRoadmap && (
+              <Link href={`/roadmaps/${skill.slug}`} className="inline-block mt-6">
+                <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-bold gap-2 px-6 py-5 text-base shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+                  <Map className="h-5 w-5" />
+                  View Learning Roadmap
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:w-80">

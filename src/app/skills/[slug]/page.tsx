@@ -1,4 +1,5 @@
 import { getSkillBySlug, getResourcesBySkillId } from "../actions";
+import { getPublishedRoadmapForSkill } from "../../admin/actions";
 import SkillDetailClient from "../skill-detail-client";
 import { notFound } from "next/navigation";
 
@@ -17,10 +18,15 @@ export default async function SkillDetailPage({ params }: Props) {
   }
 
   const resources = await getResourcesBySkillId(skill.id);
+  const publishedRoadmap = await getPublishedRoadmapForSkill(skill.id);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <SkillDetailClient skill={skill} resources={resources as any} />
+      <SkillDetailClient 
+        skill={skill} 
+        resources={resources as any} 
+        hasRoadmap={!!publishedRoadmap}
+      />
     </main>
   );
 }

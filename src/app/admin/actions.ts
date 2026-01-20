@@ -137,6 +137,56 @@ export async function createRoadmap(
   return data;
 }
 
+export async function updateRoadmap(
+  roadmapId: string,
+  title: string,
+  description: string
+) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("roadmaps")
+    .update({ title, description })
+    .eq("id", roadmapId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  revalidatePath("/admin/roadmaps/[slug]");
+  return data;
+}
+
+export async function publishRoadmap(roadmapId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("roadmaps")
+    .update({ status: "published" })
+    .eq("id", roadmapId)
+    .select()
+    .single();
+
+  // If error is about missing column, just ignore it
+  if (error && !error.message.includes("status")) throw error;
+  revalidatePath("/admin/roadmaps");
+  revalidatePath("/admin/roadmaps/[slug]");
+  return data;
+}
+
+export async function unpublishRoadmap(roadmapId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("roadmaps")
+    .update({ status: "draft" })
+    .eq("id", roadmapId)
+    .select()
+    .single();
+
+  // If error is about missing column, just ignore it
+  if (error && !error.message.includes("status")) throw error;
+  revalidatePath("/admin/roadmaps");
+  revalidatePath("/admin/roadmaps/[slug]");
+  return data;
+}
+
 export async function addRoadmapStep(
   roadmapId: string,
   title: string,
@@ -186,4 +236,99 @@ export async function getFullRoadmap(skillSlug: string) {
     skill,
     roadmap: roadmap || null,
   };
+}
+
+export async function deleteRoadmapStep(stepId: string) {
+  "use server";
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("roadmap_steps")
+    .delete()
+    .eq("id", stepId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/admin/roadmaps/[slug]");
+}
+
+export async function getPublicRoadmap(skillSlug: string) {
+  const supabase = await createClient();
+
+  // Get skill first
+  const { data: skill } = await supabase
+    .from("skills")
+    .select("id, name, slug, description")
+    .eq("slug", skillSlug)
+    .single();
+
+  if (!skill) return null;
+
+  // Try to get published roadmap first
+  let { data: roadmap, error } = await supabase
+    .from("roadmaps")
+    .select(
+      `
+      *,
+      roadmap_steps (
+        *,
+        roadmap_items (*)
+      )
+    `
+    )
+    .eq("skill_id", skill.id)
+    .eq("status", "published")
+    .single();
+
+  // If status column doesn't exist, fall back to getting any roadmap (treat all as public)
+  if (error && error.message.includes("status")) {
+    const fallback = await supabase
+      .from("roadmaps")
+      .select(
+        `
+        *,
+        roadmap_steps (
+          *,
+          roadmap_items (*)
+        )
+      `
+      )
+      .eq("skill_id", skill.id)
+      .single();
+
+    roadmap = fallback.data;
+    error = fallback.error;
+  }
+
+  if (error && error.code !== "PGRST116") throw error;
+
+  return {
+    skill,
+    roadmap: roadmap || null,
+  };
+}
+
+export async function getPublishedRoadmapForSkill(skillId: string) {
+  const supabase = await createClient();
+  let { data, error } = await supabase
+    .from("roadmaps")
+    .select("id, title, status")
+    .eq("skill_id", skillId)
+    .eq("status", "published")
+    .maybeSingle();
+
+  // If status column doesn't exist, fall back to getting any roadmap (treat all as public)
+  if (error && error.message.includes("status")) {
+    const fallback = await supabase
+      .from("roadmaps")
+      .select("id, title")
+      .eq("skill_id", skillId)
+      .maybeSingle();
+
+    // Treat as if it has status (even though it doesn't exist in DB)
+    data = fallback.data ? { ...fallback.data, status: "published" } : null;
+    error = fallback.error;
+  }
+
+  if (error) throw error;
+  return data;
 }
